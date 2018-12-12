@@ -5,7 +5,9 @@ const isAuthorized = require('../middlewares/isAuthorized')
 
 router.get('/', Controller.viewAll)
 router.get('/user', isLogin, Controller.viewUserArticles)
+router.get('/search?', Controller.searchArticle)
 router.get('/:articleId', Controller.viewArticle)
+
 
 router.use(isLogin)
 

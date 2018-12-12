@@ -115,6 +115,23 @@ class Controller {
                         })
             })
     }
+    static searchArticle(req, res) {
+        Article
+            .find()
+            .then(articles => {
+                const regex = new RegExp(req.query.search, 'i')
+                let filtered = articles.filter(datum => datum.name.match(regex))
+                if(filtered.length === 0) {
+                    res.status(400).json({message: "Search not Found"})
+                } else {
+                    res.status(200).json(filtered)
+                }
+            })
+            .catch(err => {
+                console.log(err)
+                res.status(500).json({ message: err.message, note: "Please see console for details" })
+            })
+    }
 }
 
 module.exports = Controller
