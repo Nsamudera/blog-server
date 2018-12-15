@@ -15,9 +15,7 @@ let articleId = ""
 let commentId = ""
 let token = ''
 
-
 // console.log(process.env.NODE_ENV)
-
 
 describe("Comments Test", function () {
     before((done) => {
@@ -71,7 +69,6 @@ describe("Comments Test", function () {
             })
         })
         // done()
-
     })
 
     it('should return <array of object> containing comment data', function(done) {
@@ -112,7 +109,7 @@ describe("Comments Test", function () {
             done()
         })
     })
-    it("should return 'Please sign in' if no token is given", function (done) {
+    it("should return 'Please sign in' if no token is given for getting a individual user's comments", function (done) {
         chai
             .request(app)
             .get("/comments/user")
@@ -144,7 +141,7 @@ describe("Comments Test", function () {
                 done()
             })
     })
-    it("should return 'Please sign in' if no token is given", function(done) {
+    it("should return 'Please sign in' if no token is given for creating comments" , function(done) {
         chai
             .request(app)
             .post(`/comments/${articleId}`)
@@ -157,7 +154,7 @@ describe("Comments Test", function () {
                 done()
             })
     })
-    it("should return 'Comment deleted' if article is successfully deleted", function (done) {
+    it("should return 'Comment deleted' if comment is successfully deleted", function (done) {
         chai
             .request(app)
             .delete(`/comments/${commentId}`)
@@ -170,7 +167,7 @@ describe("Comments Test", function () {
             })
     })
 
-    it("should return 'Please sign in' if no token is given", function (done) {
+    it("should return 'Please sign in' if no token is given for deleting comments", function (done) {
         chai
             .request(app)
             .delete(`/comments/${commentId}`)

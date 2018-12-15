@@ -1,9 +1,11 @@
 const User = require('../models/user')
-const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
+const Subscribe = require('../models/subscription')
 require('dotenv').config()
 //helpers
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 const encrypt = require('../helpers/development/encrypt')
+const sendEmail = require('../helpers/development/nodemailer')
 
 class Controller {
     static signup(req, res) {
@@ -25,7 +27,7 @@ class Controller {
                     })
             })
             .catch((msg => {
-                res.status(400).json({message: msg})
+                res.status(500).json({message: msg})
             }))
     }
     static signin(req, res) {
@@ -50,6 +52,25 @@ class Controller {
     }
     static decode(req, res) {
         res.status(200).json({name: req.currentUser.name, id: req.currentUser._id})
+    }
+    static subscribe(req, res) {
+        Subscribe
+            .create({
+                email: req.body.email
+            })
+            .then(user => {
+                let name = req.body.email.split('@')[0]
+                sendEmail(
+                        req.body.email, 
+                        'Welcome to the Blog Family', 
+                        `<p style="font-size:16px"><b>Hi ${name}</b>,</p> <p>We are so happy that you subscribed "The Blog". <br> Welcome, and we'll let you know whenever a new article has been publsihed.</p> <p style="font-size:14px">The Blog Team</p>`
+                        )
+                res.status(201).json({message: "Thank You for subscribing! Please check you email for confirmation."})
+            })
+            .catch((err => {
+                console.log(err)
+                res.status(500).json({message: err})
+            }))
     }
 }
 

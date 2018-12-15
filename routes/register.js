@@ -6,5 +6,6 @@ const isLogin = require('../middlewares/isLogin')
 router.post('/signup', Controller.signup)
 router.post('/signin', isUserExist, Controller.signin)
 router.get('/decode', isLogin, Controller.decode)
+router.post('/subscribe', Controller.subscribe)
 
 module.exports = router

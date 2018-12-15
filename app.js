@@ -7,6 +7,7 @@ require('dotenv').config()
 const registerRoute = require('./routes/register')
 const articleRoute = require('./routes/article')
 const commentRoute = require('./routes/comment')
+const adsRoute = require('./routes/ads')
 
 const mongoose = require('mongoose');
 // mongoose.connect('mongodb://localhost/blogYF_' + NODE_ENV,{useNewUrlParser: true}); //Use this for testing
@@ -28,6 +29,7 @@ app.use(cors())
 app.use('/register', registerRoute)
 app.use('/articles', articleRoute)
 app.use('/comments', commentRoute)
+app.use('/ads', adsRoute)
 
 app.listen(port, () => {
     console.log(`Listening to port ${port}`);

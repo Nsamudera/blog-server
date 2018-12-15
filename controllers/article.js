@@ -1,8 +1,9 @@
 const Article = require('../models/article')
-const User = require('../models/user')
+const Subscribe = require('../models/subscription')
 const Comment = require('../models/comment')
 
 const moment = require('moment')
+const sendEmail = require('../helpers/development/nodemailer')
 
 class Controller {
     static viewAll(req, res) {
@@ -61,7 +62,26 @@ class Controller {
                 return req.currentUser
                         .save()
                         .then(function() {
-                            res.status(201).json(newArticle)
+                            //send email to subscribers
+                            Subscribe
+                                .find({})
+                                .then(emails=> {
+                                    let emailList = []
+                                    emails.forEach(email => {
+                                        if(email.email !== req.currentUser.email) {
+                                            emailList.push(email.email)
+                                        }
+                                    });
+                                    emailList.forEach(email => {
+                                        let name = email.split('@')[0]
+                                        sendEmail(
+                                            email, 
+                                            'New Article from the Blog', 
+                                            `<p style="font-size:16px"><b>Hi ${name}</b>,</p> <p>Good News! There's a new article waiting to be read by You. <br> Come on down and read about <a href="http://localhost:8080/articles/${newArticle._id}"> ${newArticle.name}</a>.</p> <p style="font-size:14px">The Blog Team</p>`
+                                            )
+                                    })
+                                    res.status(201).json(newArticle)
+                                })
                         })
             })
             .catch(err => {
